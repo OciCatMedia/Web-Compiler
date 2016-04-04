@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="<$META_LANGUAGE$>">
+	<head>
+		<meta charset="utf-8">
+		<meta name="application-name" content="<$META_APPNAME$>">
+		<meta name="author" content="<$META_AUTHOR$>">
+		<meta name="keywords" content="<$META_KEYWORD$>">
+		<meta name="description" content="<$META_DESCRIPTION$>">
+
+		<title><$META_TITLE$></title>
+		
+		<link href="<$URL_ROOT$><$URL_ASSET$>style.css" rel="stylesheet" type="text/css">
+		<$META_LINK$>
+	</head>
+	<body itemscope itemtype="http://schema.org/WebPage">
+		<header>
+			<h1><$TITLE_SITE$></h1>
+			<nav>
+				<h2 class="WCAG_hide">Site Navigation</h2>
+				<$NAV_SITE$>
+			</nav>
+		</header>
+
+		<main>
+			<header>
+				<h1><$TITLE_PAGE$></h1>
+				<nav>
+					<h2 class="WCAG_hide">Page Navigation</h2>
+					<$NAV_PAGE$>
+				</nav>
+			</header>
+<$CONTENT$>
+		</main>
+		
+		<footer>
+			<nav>
+				<h2 aria-hidden="true">Footer Navigation</h2>
+				<$NAV_FOOT$>
+			</nav>
+			<small><$CONTENT_FOOTER$></small>
+		</footer>
+	</body>
+</html>
