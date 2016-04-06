@@ -26,23 +26,25 @@ class WebSite:
 		cursor_webcompile = cnx_webcompile.cursor(dictionary=True)
 
 		# retrieve and populate GLOBAL METATAG VALUES
-		cursor_webcompile.execute("SELECT * FROM ocm_webcompile.default_meta")
+		lv_query = "SELECT * FROM ocm_webcompile.default_meta"
+		cursor_webcompile.execute(lv_query)
 		query_result = cursor_webcompile.fetchall()
 		
 		for i in query_result:
 			WebSite.v_meta[i['Meta_Tag']] = i['Meta_Value']
 			WebSite.v_template = WebSite.v_template.replace('<$META_' + i['Meta_Tag'].upper() + '$>',i['Meta_Value'])
 
-		# retrieve and populate GLOBAL URL values	
-		cursor_webcompile.execute("SELECT * FROM ocm_webcompile.default_url")
+		# retrieve and populate GLOBAL URL values
+		lv_query = "SELECT * FROM ocm_webcompile.default_url"
+		cursor_webcompile.execute(lv_query)
 		query_result = cursor_webcompile.fetchall()
 		
 		for i in query_result:
 			WebSite.v_url[i['Url_Name']] = i['Url_Value']
 			WebSite.v_template = WebSite.v_template.replace('<$URL_' + i['Url_Name'].upper() + '$>',i['Url_Value'])
 
-		# retrieve SITE NAVIGATION structure
-		lv_query = "SELECT site_nav.Nav_Title, site_nav.Section_ID, site_page.Page_Path FROM ocm_webcompile.site_nav INNER JOIN ocm_webcompile.site_page ON site_nav.Page_ID = site_page.Page_ID ORDER BY site_page.Page_ID"
+		# retrieve GLOBAL NAVIGATION structure
+		lv_query = "SELECT site_section.Section_ID, Section_Title, Nav_Title, Page_Path FROM ocm_webcompile.site_section INNER JOIN ocm_webcompile.site_nav ON site_section.Section_ID = site_nav.Section_ID INNER JOIN ocm_webcompile.site_page ON site_nav.Page_ID = site_page.Page_ID WHERE site_section.Section_PrimNav = 1 ORDER BY site_section.Section_ID"
 		cursor_webcompile.execute(lv_query)
 		query_result = cursor_webcompile.fetchall()
 		
@@ -50,7 +52,9 @@ class WebSite:
 			WebSite.v_nav.append([i['Section_ID'],i['Nav_Title'],re.sub('^(|(.+?)/)$','\g<1>index',i['Page_Path']) + '.html'])
 			
 		
-		
+
+
+
 		
 		
 		
