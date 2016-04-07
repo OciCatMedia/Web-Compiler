@@ -15,28 +15,20 @@
 	<body itemscope itemtype="http://schema.org/WebPage">
 		<header>
 			<h1><$TITLE_SITE$></h1>
-			<nav>
-				<h2 class="WCAG_hide">Site Navigation</h2>
-				<$NAV_SITE$>
-			</nav>
+			<nav><h2 class="WCAG_hide">Site Navigation</h2><$NAV_SITE$></nav>
 		</header>
 
 		<main>
 			<header>
 				<h1><$TITLE_PAGE$></h1>
-				<nav>
-					<h2 class="WCAG_hide">Page Navigation</h2>
-					<$NAV_PAGE$>
-				</nav>
+				<nav aria-hidden="true" itemprop="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList"><h2>Breadcrumb</h2><$NAV_BREADCRUMB$></nav>
+				<$NAV_PAGE$>
 			</header>
 <$CONTENT$>
 		</main>
 		
 		<footer>
-			<nav>
-				<h2 aria-hidden="true">Footer Navigation</h2>
-				<$NAV_FOOT$>
-			</nav>
+			<nav><h2 aria-hidden="true">Footer Navigation</h2><$NAV_FOOT$></nav>
 			<small>Website design and code &copy; 2016 OciCat Media; all content - unless specified otherwise - &copy; 2013 OciCat Media.<$CONTENT_FOOTER$></small>
 		</footer>
 	</body>
