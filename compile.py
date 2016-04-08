@@ -64,8 +64,8 @@ class WebSite:
 		lv_footnav = '<ul>' + lv_footnav + '</ul>'
 		WebSite.v_template = WebSite.v_template.replace('<$NAV_FOOT$>',lv_footnav)
 		
-		# construct STATIC PAGES
-		lv_query = "SELECT Page_Title, Page_Name, Page_Path, Page_MetaDesc, Page_MetaKey, Page_Content, Section_Title FROM ocm_webcompile.site_page INNER JOIN ocm_webcompile.site_section ON site_page.Section_ID = site_section.Section_ID ORDER BY site_section.Section_ID"
+		# construct HTML PAGES
+		lv_query = "SELECT Page_ID, Page_Title, Page_Name, Page_Path, Page_MetaDesc, Page_MetaKey, Page_Content, Page_Type, Section_Title FROM ocm_webcompile.site_page INNER JOIN ocm_webcompile.site_section ON site_page.Section_ID = site_section.Section_ID ORDER BY site_section.Section_ID"
 		cursor_webcompile.execute(lv_query)
 		query_result = cursor_webcompile.fetchall()
 		
@@ -142,7 +142,8 @@ class WebPage:
 		
 		
 		
-		
+		if (pagequery['Page_Type'] != 'page'):
+			component['Comp' + pagequery['Page_Type'].title()](pagequery['Page_ID'])
 		
 		
 		
@@ -162,9 +163,84 @@ class WebPage:
 		self.v_template = self.v_template.replace('<$TITLE_PAGE$>',self.v_pagename)
 
 		self.v_template = self.v_template.replace('<$CONTENT$>',self.v_content)
+
+
+
+
+class CompAlbum:
+	def __init__ (self, pageid):
+		self.x = something
+
+class CompBlog:
+	def __init__ (self, pageid):
+		self.v_pageid = pageid
+		self.v_article = []
+		
+		# establish RAW TEMPLATE (article)
+		with open('template\\blog\\article.html', 'r') as tmp_template:
+			self.v_template = tmp_template.read()
+		
+		# establish RAW TEMPLATE (archive wrapper)
+		with open('template\\blog\\article-archive.html', 'r') as tmp_template:
+			self.v_template = tmp_template.read()
+
+		# establish RAW TEMPLATE (post wrapper)
+		with open('template\\blog\\article-post.html', 'r') as tmp_template:
+			self.v_template = tmp_template.read()
+
+		cnx_blog = mysql.connector.connect(user='localread')
+		cursor_blog = cnx_blog.cursor(dictionary=True)
+
+		lv_query = "SELECT Blog_ID, Blog_Title, COUNT(Post_ID) AS Blog_PostCount, MAX(Post_Epoch) AS Blog_LastPost FROM ocm_webcompile.comp_blog LEFT JOIN ocm_webcompile.comp_blog_post ON comp_blog.Blog_ID = comp_blog_post.Blog_ID WHERE comp_blog.Page_ID = self.v_pageid"
+		cursor_webcompile.execute(lv_query)
+		query_result = cursor_webcompile.fetchall()
+		
+		self.v_blogID = query_result['Blog_ID']
+		self.v_blogtitle = query_result['Blog_Title']
+		self.v_postcount = query_result['Blog_PostCount']
+		self.v_postlast = query_result['Blog_LastPost']
+			
+		
+		
 		
 
+		
+		cursor_blog.close()
+		cnx_blog.close()		
 
+		# comp_blog
+
+
+		
+		# CREATE TABLE IF NOT EXISTS ocm_webcompile.comp_blog (
+			# Blog_ID TINYINT(1) UNSIGNED NOT NULL AUTO_INCREMENT,
+			# Blog_Title VARCHAR(100) NOT NULL,
+			# Page_ID INT(10) UNSIGNED NOT NULL,
+			# PRIMARY KEY (Post_ID)
+		# ) ENGINE=InnoDB;
+
+		# CREATE TABLE IF NOT EXISTS ocm_webcompile. (
+			# Post_ID INT(10) UNSIGNED NOT NULL AUTO_INCREMENT,
+			# Post_Title VARCHAR(100) NOT NULL,
+			# Post_Content TEXT NOT NULL,
+			# Post_Epoch INT(10) UNSIGNED NOT NULL,
+			# Blog_ID TINYINT(1) UNSIGNED NOT NULL,
+			# PRIMARY KEY (Post_ID)
+		# ) ENGINE=InnoDB;
+
+		
+		
+class CompPortfolio:
+	def __init__ (self, pageid):
+		self.x = something
+
+class CompProduct:
+	def __init__ (self, pageid):
+		self.x = something
+
+class CompSitemap:
+	def __init__ (self, pageid):
+		self.x = something
 		
 
 		

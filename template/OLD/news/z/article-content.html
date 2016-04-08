@@ -1,0 +1,32 @@
+				<header>
+					<$NEWS_TITLE$>
+					<meta itemprop="url mainentityofpage" content="<$NEWS_URL$>" />
+					<meta itemprop="position" content="<$NEWS_ID$>" />
+				</header>
+				<div itemprop="text"><$NEWS_CONTENT$></div>
+				<footer>
+					<a itemprop="discussionurl" href="<$NEWS_URL$>#comment"><span itemprop="commentcount"><$NEWS_COMMENT_COUNT$></span> comments</a>
+					<span itemprop="author" itemscope itemtype="https://schema.org/Person">
+						<a itemprop="url" href="<$NEWS_AUTHORURL$>" rel="author">
+							<span itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+								<img itemprop="url" src="<$NEWS_AUTHORIMAGE$>" alt="" width="40" height="40">
+								<meta itemprop="width height" content="200">
+							</span>
+							<span itemprop="name"><$NEWS_AUTHOR$></span> posted
+						</a>
+					</span>
+					<time itemprop="datecreated datepublished" datetime="<$NEWS_DATERFC$>"><$NEWS_DATE$></time>
+					<meta itemprop="datemodified" content="<$NEWS_DATERFC$>" />
+					<span itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+						<meta itemprop="name" content="<$NEWS_PUBLISHER$>" />
+						<span itemprop="logo" itemscope itemtype="http://schema.org/ImageObject">
+							<meta itemprop="url" content="<$NEWS_PUBLISHERLOGO$>" />
+							<meta itemprop="width height" content="200" />
+						</span>
+					</span>
+					<span itemprop="image" itemscope itemtype="http://schema.org/ImageObject">
+						<meta itemprop="url" content="<$NEWS_IMAGE$>" />
+						<meta itemprop="width" content="<$NEWS_IMAGEWIDTH$>" />
+						<meta itemprop="height" content="<$NEWS_IMAGEHEIGHT$>" />
+					</span>
+				</footer>
