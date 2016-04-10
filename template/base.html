@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="<$META_LANGUAGE$>">
+	<head>
+		<meta charset="utf-8">
+		<meta name="application-name" content="<$META_APPNAME$>">
+		<meta name="author" content="<$META_AUTHOR$>">
+		<meta name="keywords" content="<$META_KEYWORD$>">
+		<meta name="description" content="<$META_DESCRIPTION$>">
+
+		<title><$META_TITLE$></title>
+		
+		<link href="<$URL_ROOT$><$URL_ASSET$>style.css" rel="stylesheet" type="text/css">
+		<link href="../wwwroot/asset/style.css" rel="stylesheet" type="text/css">
+		<$META_LINK$>
+	</head>
+	<body itemscope itemtype="http://schema.org/WebPage">
+		<header>
+			<h1><$TITLE_SITE$></h1>
+			<nav><h2 class="WCAG_hide">Site Navigation</h2><ul><$NAV_SITE$></ul></nav>
+		</header>
+		
+		<nav><h2 class="WCAG_hide">Page Navigation</h2><ul><$NAV_PAGE$></ul></nav>
+		<nav itemprop="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList" aria-hidden="true"><h2>Breadcrumb</h2><$NAV_BREADCRUMB$></nav>
+		
+		<main itemprop="mainEntity" itemscope itemtype="<$RICH_ITEMTYPE$>">
+<$CONTENT_WRAPPER$>
+		</main>
+		
+		<footer>
+			<nav><h2 aria-hidden="true">Footer Navigation</h2><ul><$NAV_FOOT$></ul></nav>
+			<small>Website design and code &copy; 2016 OciCat Media; all content - unless specified otherwise - &copy; 2013 OciCat Media.<$CONTENT_FOOTER$></small>
+		</footer>
+	</body>
+</html>
