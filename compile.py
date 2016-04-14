@@ -289,7 +289,7 @@ class CompBlog:
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_COMMENT_COUNT$>','0')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_AUTHOR$>',i['User_Name'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_AUTHORURL$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '.html')
-			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_AUTHORIMAGE$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '/avatar.jpg')
+			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_AUTHORIMAGE$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '/avatar.png')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_PUBLISHER$>','OciCat Media')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_PUBLISHERLOGO$>',WebSite.v_url['root'] + WebSite.v_url['asset'] + 'logobkg.png')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_IMAGE$>',WebSite.v_url['root'] + WebSite.v_url['asset'] + 'articledefault.png')
@@ -322,7 +322,8 @@ class CompBlog:
 			
 			# inject NAVIGATION CONSTRUCTS
 			lv_article['post'] = lv_article['post'].replace('<$NAV_PAGE$>',lv_pagenav)
-			
+			lv_article['post'] = lv_article['post'].replace('<$NAV_SITE$>',lv_webpage.v_sitenav)
+
 			#inject FINAL CONTENT
 			lv_article['post'] = lv_article['post'].replace('<$META_KEYWORD$>',lv_webpage.v_metakey)
 			lv_article['post'] = lv_article['post'].replace('<$META_DESCRIPTION$>',lv_webpage.v_metadesc)
