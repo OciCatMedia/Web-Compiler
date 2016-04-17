@@ -235,7 +235,7 @@ class CompBlog:
 		self.v_postlast = query_result[0]['Blog_LastPost']
 
 		# retrieve BLOG POSTS
-		lv_query = "SELECT Post_ID, Post_Title, Post_Content, Post_Epoch, ocm_webcompile.Fuzzy_Date(Post_Live) AS Post_Fuzzy, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%H:%i %b %e, %y') AS Post_Date, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y-%m-%dT%H:%i:%SZ') AS Post_DateRFC, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y/%m/%d') AS Post_Path, Post_Live, Post_IP, 'Aurani' AS User_Name FROM ocm_webcompile.comp_blog_post WHERE Blog_ID = " + str(self.v_blogID) + " AND Post_Live <= UNIX_TIMESTAMP() ORDER BY Post_Live DESC"
+		lv_query = "SELECT Post_ID, Post_Title, Post_Content, Post_Epoch, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%H:%i %b %e, %y') AS Post_Date, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y-%m-%dT%H:%i:%SZ') AS Post_DateRFC, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y/%m/%d') AS Post_Path, Post_Live, Post_IP, 'Aurani' AS User_Name FROM ocm_webcompile.comp_blog_post WHERE Blog_ID = " + str(self.v_blogID) + " AND Post_Live <= UNIX_TIMESTAMP() ORDER BY Post_Live DESC"
 		cursor_blog.execute(lv_query)
 		query_result = cursor_blog.fetchall()
 
@@ -289,7 +289,6 @@ class CompBlog:
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_LANGUAGE$>','en-ca')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_KEYWORD$>',lv_webpage.v_metakey)
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_URL$>',lv_article['url'])
-			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_FUZZY$>',i['Post_Fuzzy'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATE$>',i['Post_Date'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATERFC$>',i['Post_DateRFC'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATECOPY$>',i['Post_Path'][0:4])
@@ -310,7 +309,6 @@ class CompBlog:
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_LANGUAGE$>','en-ca')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_KEYWORD$>',lv_webpage.v_metakey)
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_URL$>',lv_article['url'])
-			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_FUZZY$>',i['Post_Fuzzy'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATE$>',i['Post_Date'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATERFC$>',i['Post_DateRFC'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATECOPY$>',i['Post_Path'][0:4])
