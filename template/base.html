@@ -10,7 +10,7 @@
 		<title><$META_TITLE$></title>
 		
 		<link href="<$URL_ROOT$><$URL_ASSET$>style.css" rel="stylesheet" type="text/css">
-		<link href="../wwwroot/asset/style.css" rel="stylesheet" type="text/css">
+		<link href="file:///C:/Python/webcompiler/wwwroot/asset/style.css" rel="stylesheet" type="text/css">
 		<$META_LINK$>
 	</head>
 	<body itemscope itemtype="http://schema.org/WebPage">
@@ -22,7 +22,7 @@
 		<nav><h2 class="WCAG_hide">Page Navigation</h2><ul><$NAV_PAGE$></ul></nav>
 		<nav itemprop="breadcrumb" itemscope itemtype="http://schema.org/BreadcrumbList" aria-hidden="true"><h2>Breadcrumb</h2><$NAV_BREADCRUMB$></nav>
 		
-		<main itemprop="mainEntity" itemscope itemtype="<$RICH_ITEMTYPE$>">
+		<main id="<$CONTENT_ID$>" itemprop="mainEntity" itemscope itemtype="<$RICH_ITEMTYPE$>">
 <$CONTENT_WRAPPER$>
 		</main>
 		

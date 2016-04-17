@@ -111,7 +111,7 @@ class WebPage:
 
 		self.v_metakey = pagequery['Page_MetaKey']
 		self.v_metadesc = pagequery['Page_MetaDesc']
-		self.v_metalink = '<!-- link rel="canonical" -->'
+		self.v_metalink = '<$META_LINK$>'
 	
 		self.v_content = pagequery['Page_Content']
 		
@@ -186,6 +186,8 @@ class WebPage:
 		self.v_template = self.v_template.replace('<$CONTENT$>',self.v_content)
 		
 		
+		self.v_template = re.sub('<\$([^\$]*)\$>', '', self.v_template)
+
 		if not os.path.exists(os.path.dirname(WebSite.v_url['path'] + self.v_pagepath.replace('/','\\'))):
 			os.makedirs(os.path.dirname(WebSite.v_url['path'] + self.v_pagepath.replace('/','\\')))
 		
@@ -204,12 +206,16 @@ class CompBlog2:
 	
 class CompBlog:
 	def __init__ (self, lv_webpage):
-		self.v_article = []
+		self.v_article = ''
 		self.v_template = {}
 		
 		# establish RAW TEMPLATE (archive)
 		with open('template\\blog\\archive.html', 'r') as tmp_template:
 			self.v_template["archive"] = tmp_template.read()
+		
+		# establish ARCHIVE WRAPPER
+		with open('template\\blog.html', 'r') as tmp_template:
+			self.v_template["archivewrapper"] = tmp_template.read()
 		
 		# establish RAW TEMPLATE (post)
 		with open('template\\blog\\post.html', 'r') as tmp_template:
@@ -229,7 +235,7 @@ class CompBlog:
 		self.v_postlast = query_result[0]['Blog_LastPost']
 
 		# retrieve BLOG POSTS
-		lv_query = "SELECT Post_ID, Post_Title, Post_Content, Post_Epoch, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%H:%i %b %e, %y') AS Post_Date, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y-%m-%dT%H:%i:%SZ') AS Post_DateRFC, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y/%m/%d') AS Post_Path, Post_Live, Post_IP, 'Aurani' AS User_Name FROM ocm_webcompile.comp_blog_post WHERE Blog_ID = " + str(self.v_blogID) + " AND Post_Live <= UNIX_TIMESTAMP() ORDER BY Post_Live DESC"
+		lv_query = "SELECT Post_ID, Post_Title, Post_Content, Post_Epoch, ocm_webcompile.Fuzzy_Date(Post_Live) AS Post_Fuzzy, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%H:%i %b %e, %y') AS Post_Date, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y-%m-%dT%H:%i:%SZ') AS Post_DateRFC, DATE_FORMAT(CONVERT_TZ(FROM_UNIXTIME(Post_Live), @@session.time_zone,'UTC'),'%Y/%m/%d') AS Post_Path, Post_Live, Post_IP, 'Aurani' AS User_Name FROM ocm_webcompile.comp_blog_post WHERE Blog_ID = " + str(self.v_blogID) + " AND Post_Live <= UNIX_TIMESTAMP() ORDER BY Post_Live DESC"
 		cursor_blog.execute(lv_query)
 		query_result = cursor_blog.fetchall()
 
@@ -283,6 +289,7 @@ class CompBlog:
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_LANGUAGE$>','en-ca')
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_KEYWORD$>',lv_webpage.v_metakey)
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_URL$>',lv_article['url'])
+			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_FUZZY$>',i['Post_Fuzzy'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATE$>',i['Post_Date'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATERFC$>',i['Post_DateRFC'])
 			lv_article['post'] = lv_article['post'].replace('<$ARTICLE_DATECOPY$>',i['Post_Path'][0:4])
@@ -303,13 +310,14 @@ class CompBlog:
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_LANGUAGE$>','en-ca')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_KEYWORD$>',lv_webpage.v_metakey)
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_URL$>',lv_article['url'])
+			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_FUZZY$>',i['Post_Fuzzy'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATE$>',i['Post_Date'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATERFC$>',i['Post_DateRFC'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_DATECOPY$>',i['Post_Path'][0:4])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_COMMENT_COUNT$>','0')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_AUTHOR$>',i['User_Name'])
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_AUTHORURL$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '.html')
-			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_AUTHORIMAGE$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '/avatar.jpg')
+			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_AUTHORIMAGE$>',WebSite.v_url['user'] + i['User_Name'].replace(' ', '').lower() + '/avatar.png')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_PUBLISHER$>','OciCat Media')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_PUBLISHERLOGO$>',WebSite.v_url['root'] + WebSite.v_url['asset'] + 'logobkg.png')
 			lv_article['archive'] = lv_article['archive'].replace('<$ARTICLE_IMAGE$>',WebSite.v_url['root'] + WebSite.v_url['asset'] + 'articledefault.png')
@@ -335,8 +343,8 @@ class CompBlog:
 				lv_article['post'] = re.sub('^(\s*)<\$META_LINK\$>.*$','\g<1><link href="' + lv_article['next'][2] + '.html" rel="next">\n\g<1><$META_LINK$>', lv_article['post'], flags=re.MULTILINE)
 			
 			lv_article['post'] = lv_article['post'].replace('<$NAV_BREADCRUMB$>','<li itemprop="itemListElement" itemscope itemtype="http://schema.org/ListItem"><a href="' + lv_article['url'] + '" itemprop="item"><span itemprop="name">' + i['Post_Title'] + '</span></a><meta itemprop="position" content="' + str(lv_webpage.v_breadcrumblevel + 1) + '"></li>')
+			lv_article['post'] = lv_article['post'].replace('<$CONTENT_ID$>','blog')
 			lv_article['post'] = lv_article['post'].replace('<$RICH_ITEMTYPE$>','https://schema.org/BlogPosting')
-				
 				
 		
 			
@@ -351,8 +359,40 @@ class CompBlog:
 			
 			with open(lv_article['path'], 'w') as tmp_template:
 				tmp_template.write(lv_article['post'])
+			
+			self.v_article = self.v_article + '\n\n' + lv_article['archive']
+			
+		self.v_article = self.v_template["archivewrapper"].replace('<$CONTENT$>',self.v_article)
+		self.v_article = lv_webpage.v_template.replace('<$CONTENT_WRAPPER$>',self.v_article)
+		
+		# construct PAGE NAVIGATION
+		lv_pagenav = ''
+		if (not len(lv_pagenav)):
+			lv_pagenav = '<$NAV_PAGE$>'
 
+		# inject NAVIGATION CONSTRUCTS
+		self.v_article = self.v_article.replace('<$NAV_PAGE$>',lv_pagenav)
+		self.v_article = self.v_article.replace('<$NAV_SITE$>',lv_webpage.v_sitenav)
 
+		#inject FINAL CONTENT
+		self.v_article = self.v_article.replace('<$META_KEYWORD$>',lv_webpage.v_metakey)
+		self.v_article = self.v_article.replace('<$META_DESCRIPTION$>',lv_webpage.v_metadesc)
+		self.v_article = self.v_article.replace('<$META_TITLE$>',lv_webpage.v_pagetitle)
+		self.v_article = self.v_article.replace('<$CONTENT_ID$>','blog')
+		self.v_article = self.v_article.replace('<$RICH_ITEMTYPE$>','https://schema.org/Blog')
+		self.v_article = self.v_article.replace('<$BLOG_KEYWORD$>',lv_webpage.v_metakey)
+		self.v_article = self.v_article.replace('<$BLOG_DESCRIPTION$>',lv_webpage.v_metadesc)
+			
+		#self.v_article = re.sub('<\$([^\$]*)\$>', '', self.v_article)
+		
+		lv_webpage.v_template = self.v_article
+		
+		#self.v_article = re.sub('<\$([^\$]*)\$>', '\n\nFIX THIS: \g<1> :FIX THIS\n\n', self.v_article)
+		#self.v_article = re.sub('<\$([^\$]*)\$>', '', self.v_article)
+		
+		
+		
+		
 			#print(lv_article['post'] + '\n\n\n\n\n\n\n')
 			
 		
